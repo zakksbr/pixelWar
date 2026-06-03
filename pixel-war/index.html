@@ -1,13 +1,69 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pixel-war</title>
+    <link rel="stylesheet" href="src/style.css">
+    <title>Pixel War</title>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+    <header class="top-bar">
+      <h1>PIXEL IUT WAR</h1>
+    </header>
+
+    <main class="dashboard">
+      <aside class="panel-left">
+        <img src="chevaliers.png" class="preview-img">
+        <table id="players-table">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Equipe</th>
+              <th>Dernière Modification</th>
+              <th>Banni</th>
+            </tr>
+          </thead>
+          <tbody>
+            </tbody>
+        </table>
+      </aside>
+
+      <section class="panel-center">
+        <div id="board"></div>
+      </section>
+
+      <aside class="panel-right">
+        <div class="control-box">
+          <label>Identification obligatoire</label>
+          <input type="text" id="uid-input" placeholder="#UID">
+        </div>
+
+        <div class="control-box">
+          <label>Choisir une couleur</label>
+          <input type="color" id="color-picker" value="#ffff00">
+        </div>
+
+        <div class="control-box">
+          <label>Temps d'attente avant modification</label>
+          <p id="wait-message">Vous pouvez modifier un pixel</p>
+        </div>
+
+        <div class="control-box">
+          <label>Choisir votre équipe :</label>
+          <div class="team-buttons">
+            <button class="team-btn" data-team="1">Equipe 1</button>
+            <button class="team-btn" data-team="2">Equipe 2</button>
+            <button class="team-btn" data-team="3">Equipe 3</button>
+            <button class="team-btn" data-team="3">Equipe 4</button>
+          </div>
+        </div>
+
+        <div class="control-box">
+          <label>Dernière information retournée par le serveur :</label>
+          <p id="server-info">pixel modifié avec succès</p>
+        </div>
+      </aside>
+    </main>
+
+<script type="module" src="src/main.js"></script>
+</body>
 </html>
