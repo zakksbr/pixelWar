@@ -775,4 +775,49 @@ L'objectif est d'utiliser `fetch` en `GET` sur la route `https://api-cours-s1.co
         // 5. Gère l'erreur 400/404 (avec le catch) si le serveur indique qu'il n'y a plus de citations.
     </script>
 
+
+
+    ## 32. Corrections du sujet d'entraînement (Fichiers du DS)
+Le professeur a explicitement indiqué que **toutes les questions du devoir ressembleront à ces deux exercices**.
+
+**Question test 1 : Fichier `etu1.js` (Manipulation de texte)**
+Objectif : Afficher dans la console la chaîne de caractères passée en paramètre, entièrement en majuscules.
+
+    const etu1 = (element) => {  
+        // Utilisation de la méthode native pour passer en majuscules
+        console.log(element.toUpperCase());
+    };
+
+    export const testEtu1 = (element) => {  
+        etu1("boNjouR!");
+    };
+
+---
+
+**Question test 2 : Fichier `etu2.js` (Manipulation du DOM et Événements)**
+Objectif : Créer un bouton contenant le texte passé en paramètre, déclencher une alerte au clic, et l'insérer dans la zone de réponse définie dans `main.js`. 
+⚠️ *Attention : Il faut absolument retirer l'import Reactstrap (`import { Button } from "reactstrap";`) présent par erreur dans le fichier de base fourni, sinon la compilation Vite plantera.*
+
+    const etu2 = (element) => {  
+        // 1. Création du nœud HTML
+        const bouton = document.createElement('button');
+        
+        // 2. Ajout du texte (textContent et non value)
+        bouton.textContent = element;
+        
+        // 3. Ajout de l'écouteur d'événement avec une fonction fléchée
+        bouton.addEventListener('click', () => {
+            alert(element);
+        });
+        
+        // 4. Ciblage de la zone d'affichage et insertion dans le DOM
+        const zoneReponse = document.getElementById('reponse');
+        zoneReponse.appendChild(bouton);
+    };
+
+    export const testEtu2 = (element) => {  
+        etu2("boNjouR!");
+    };
+
+
     
