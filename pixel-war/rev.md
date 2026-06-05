@@ -820,4 +820,138 @@ Objectif : Créer un bouton contenant le texte passé en paramètre, déclencher
     };
 
 
+    # Fiche de Révision : Fonctionnalités Avancées (Anticipation DS)
+
+---
+
+## 33. Sauvegarde de l'UID (LocalStorage)
+Il est très fréquent en examen de demander à ce qu'une saisie utilisateur soit conservée même si on actualise la page. **Ce qu'il faut ajouter dans `main.js` :**
+
+    // 1. Au chargement de la page, on vérifie si l'UID est déjà sauvegardé
+    window.addEventListener('load', () => {
+      const savedUid = localStorage.getItem('pixelWarUid');
+      if (savedUid) {
+        uidInput.value = savedUid;
+      }
+    });
+
+    // 2. On écoute les changements sur l'input pour sauvegarder en temps réel
+    uidInput.addEventListener('input', (event) => {
+      localStorage.setItem('pixelWarUid', event.target.value);
+    });
+
+## 34. Filtrage des Joueurs (Manipulation de Tableaux et du DOM)
+M. Journet a insisté sur les boucles (for...of, forEach) et les méthodes de tableaux. Une question classique serait de filtrer le tableau des joueurs par équipe.
+
+Côté HTML (à rajouter dans le panel gauche) :
+
+    <select id="team-filter">
+      <option value="all">Toutes les équipes</option>
+      <option value="1">Équipe 1</option>
+      <option value="2">Équipe 2</option>
+    </select>
+
+Côté JS (modification de fetchPlayersTable) :
+
+    document.getElementById('team-filter').addEventListener('change', async (event) => {
+      const teamId = event.target.value;
+      const uid = uidInput.value;
+      if (!uid) return;
+
+      const response = await fetch(`https://pixel-api.codenestedu.fr/liste-joueurs?uid=${uid}`);
+      let players = await response.json();
+
+      // Filtrage du tableau avec la méthode native .filter()
+      if (teamId !== "all") {
+        players = players.filter(player => player.equipe === parseInt(teamId));
+      }
+
+      // Rendu du tableau (identique à ton code actuel)
+      const tbody = document.querySelector('#players-table tbody');
+      tbody.innerHTML = ''; 
+      players.forEach(player => {
+        /* ... création des <tr> et <td> ... */
+      });
+    });
+
+## 35. Statistiques du Plateau avec une Map (Les Collections)
+Puisque le cours aborde spécifiquement les collections (Map, Set), une fonctionnalité demandée pourrait être de compter combien de pixels de chaque couleur sont présents sur le plateau.
+
+Ce qu'il faut ajouter dans renderBoard (ou via un bouton dédié) :
+
+    const calculerStatistiquesCouleurs = (pixelsArray) => {
+      const flatPixels = pixelsArray.flat();
+      const colorStats = new Map();
+
+      flatPixels.forEach(pixel => {
+        // On extrait la couleur (selon le format renvoyé par l'API)
+        let color = null;
+        if (typeof pixel === 'string') {
+          color = pixel;
+        } else if (pixel && pixel.couleur) {
+          color = pixel.couleur;
+        }
+
+        // On utilise la Map pour compter
+        if (color) {
+          if (colorStats.has(color)) {
+            colorStats.set(color, colorStats.get(color) + 1);
+          } else {
+            colorStats.set(color, 1);
+          }
+        }
+      });
+
+      // Affichage dans la console (ou dans le DOM via une boucle for...of)
+      for (let [couleur, quantite] of colorStats) {
+        console.log(`Couleur ${couleur} : ${quantite} pixels`);
+      }
+    };
+
+## 36. Refactoring Orienté Objet (Les Classes)
+Ton projet actuel est très procédural (suite de fonctions). Le cours insiste sur les Classes et les attributs privés (#). Il pourrait t'être demandé d'encapsuler la logique de l'utilisateur.
+
+Création d'un fichier Player.js (Export/Import) :
+
+    export class Player {
+      #uid; // Attribut privé
+
+      constructor(uid) {
+        this.#uid = uid;
+      }
+
+      // Getter (facultatif mais propre)
+      getUid = () => {
+        return this.#uid;
+      }
+
+      // Méthode fléchée pour interroger l'API
+      verifierTempsAttente = async () => {
+        if (!this.#uid) return;
+        try {
+          const response = await fetch(`https://pixel-api.codenestedu.fr/temps-attente?uid=${this.#uid}`);
+          const data = await response.json();
+          return data.tempsAttente;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+
+Note : Si cette question tombe, n'oublie pas de faire l'import (`import { Player } from './Player.js'`) dans ton main.js pour l'utiliser !
+
+## 37. Animations et Feedbacks Visuels (classList)
+Pour confirmer qu'un pixel a été cliqué ou qu'une erreur est survenue (ex: refus du serveur), on te demandera souvent de manipuler les classes CSS.
+
+Exemple de tremblement sur erreur (dans le .catch ou if (!response.ok)) :
+
+    const serverInfo = document.getElementById('server-info');
+    serverInfo.textContent = "Erreur regarde la console";
     
+    // On ajoute une classe CSS (qui contient par exemple une animation en rouge)
+    serverInfo.classList.add('erreur-animation');
+    
+    // On la retire après 2 secondes pour pouvoir rejouer l'animation plus tard
+    setTimeout(() => {
+      serverInfo.classList.remove('erreur-animation');
+    }, 2000);
