@@ -13,14 +13,14 @@ Client web de la Pixel War, un projet collaboratif en pur Vanilla JS que j'ai d�
 ---
 
 ## Stack 
-* **Frontend :** HTML5, CSS3, JavaScript (ES6+ avec utilisation stricte des fonctions fléchées).
+* **Frontend :** HTML5, CSS3, JavaScript.
 * **Réseau :** Fetch API (requêtes GET/PUT, gestion de l'asynchrone avec `async/await`).
 
 ---
 
 ## Comment lancer le projet sur le localhost
 
-1. Installer les dépendances (cela va générer un dossier `node_modules` qu'il ne faut pas push) :
+1. Installer les dépendances :
    `npm install`
 2. Lance le serveur de dev :
    `npm run dev`
